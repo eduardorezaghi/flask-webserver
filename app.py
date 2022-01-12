@@ -94,5 +94,17 @@ def post_form():
     return make_response(jsonify(carrinho), 200)
 # ----------------------------------------------------------------------------
 
+# @app.route('/put')
+# def put():
+#     return ...
+
+# @app.route('/patch')
+# def patch():
+#     return ...
+
+# @app.route('/delete')
+# def delete():
+#     return ...
+
 if __name__ == '__main__':
     app.run(debug=True)
