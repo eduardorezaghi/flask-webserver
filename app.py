@@ -80,31 +80,44 @@ def post_form():
         # Insere no final do carrinho o novo item criado
         carrinho.append(novo_item)
 
+        # Exibe novamente todos os itens no carrinho de compras
+        return make_response(jsonify('Item criado por formulario',carrinho), 200)
+        
     # Se a requisição vir por meio de um JSON
-    # ex: >> curl -d "nome=cd player" -X POST http://127.0.0.1:5000/post/
+    # ex: >> curl -X POST 127.0.0.1:5000/post/ -H "Content-Type: application/json" -d '{\"nome\":\"notebook avell\"}'
     else:
+    
+        body = request.get_json()
+
+        if not body:
+            return make_response(jsonify({"erro":"Nome invalido"}), 400)
+
         # Extrai o valor de "nome" na requisição do JSON
-        nome = request.json['nome']
+        nome = body['nome']
         
         # Se o valor de nome for um valor inválido
         if not nome:
-            return make_response(jsonify({"erro":"Item invalido"}), 404)
+            return make_response(jsonify({"erro":"Nome invalido"}), 400)
 
-    # Exibe novamente todos os itens no carrinho de compras
-    return make_response(jsonify(carrinho), 200)
-# ----------------------------------------------------------------------------
+        novo_item = {
+            # Incremento do id: valor do ID do último item do carrinho
+            # somado com 1
+            'id': carrinho[-1]['id'] + 1,
+            # Nome extraído da requisição
+            'nome': nome
+        }
 
-# @app.route('/put')
-# def put():
-#     return ...
+        # Insere no final do carrinho o novo item criado
+        carrinho.append(novo_item)
+
+        # Exibe novamente todos os itens no carrinho de compras
+        return make_response(jsonify('Item criado por JSON',carrinho), 200)
+    # ----------------------------------------------------------------------------
 
 # @app.route('/patch')
 # def patch():
 #     return ...
 
-# @app.route('/delete')
-# def delete():
-#     return ...
 
 if __name__ == '__main__':
     app.run(debug=True)
