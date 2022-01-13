@@ -139,10 +139,23 @@ def put(id):
     item[0]['nome'] = body['nome']
 
     return make_response(jsonify(carrinho), 200)
+
 # @app.route('/patch')
 # def patch():
 #     return ...
 
+@app.route('/delete/<int:id>', methods=['DELETE'])
+def delete(id):
+
+    # Para cada item no carrinho, procure por um com determinado ID
+    item = [item for item in carrinho if item['id'] == id]
+
+    if item:
+        carrinho.remove(item[0])
+        return make_response(jsonify(carrinho), 201)
+
+    return make_response(jsonify({"erro":"Item nao encontrado"}), 404)
+    
 
 if __name__ == '__main__':
     app.run(debug=True)
