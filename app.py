@@ -161,6 +161,34 @@ def put(id):
 # @app.route('/patch')
 # def patch():
 #     return ...
+# ROTAS PATCH
+# ----------------------------------------------------------------------------
+
+# Atualiza um item no carrinho por requisição JSON
+@app.route('/patch/<int:id>', methods=['PATCH'])
+def patch(id):
+
+    # Extrai o conteúdo do corpo da requisição JSON
+    body = request.get_json()
+
+    # Se o body estiver vazio
+    if not body:
+        return make_response(jsonify({"erro":"Nome invalido"}), 400)
+
+    # Para cada item no carrinho, procure por um com determinado ID
+    item = [item for item in carrinho if item['id'] == id]
+
+    # Se o item não for encontrado
+    if len(item) == 0:
+        return make_response(jsonify({"erro":"Item nao existe"}), 404)
+
+    # Modifica o valor do nome do item encontrado com o valor presente
+    # na requisição
+    item[0]['nome'] = body['nome']
+
+    # Exibe novamente todos os itens no carrinho de compras
+    return make_response(jsonify(carrinho), 200)
+# ----------------------------------------------------------------------------
 
 @app.route('/delete/<int:id>', methods=['DELETE'])
 def delete(id):
