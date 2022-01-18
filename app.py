@@ -117,17 +117,24 @@ def post_form():
         return make_response(jsonify('Item criado por JSON',carrinho), 200)
     # ----------------------------------------------------------------------------
 
+# ROTAS PUT
+# ----------------------------------------------------------------------------
+
+# Atualiza ou cria um novo item no carrinho por requisição JSON
 @app.route('/put/<int:id>', methods=['PUT'])
 def put(id):
 
+    # Extrai o conteúdo do corpo da requisição JSON
     body = request.get_json()
 
+    # Se o body estiver vazio
     if not body:
         return make_response(jsonify({"erro":"Nome invalido"}), 400)
 
     # Para cada item no carrinho, procure por um com determinado ID
     item = [item for item in carrinho if item['id'] == id]
 
+    # Se o item não for encontrado
     if len(item) == 0:
         novo_item = {
             # Incremento do id: valor do ID do último item do carrinho
@@ -136,12 +143,20 @@ def put(id):
             # Nome extraído da requisição
             'nome': body['nome']
         }
+
+        # Insere no final do carrinho o novo item criado
         carrinho.append(novo_item)
+
+        # Exibe novamente todos os itens no carrinho de compras
         return make_response(jsonify(carrinho), 200)
 
+    # Modifica o valor do nome do item encontrado com o valor presente
+    # na requisição
     item[0]['nome'] = body['nome']
 
+    # Exibe novamente todos os itens no carrinho de compras
     return make_response(jsonify(carrinho), 200)
+# ----------------------------------------------------------------------------
 
 # @app.route('/patch')
 # def patch():
