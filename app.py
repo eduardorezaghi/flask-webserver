@@ -87,12 +87,15 @@ def post_form():
     # ex: >> curl -X POST 127.0.0.1:5000/post/ -H "Content-Type: application/json" -d '{\"nome\":\"notebook avell\"}'
     else:
     
+        # Extrai o conteúdo do corpo da requisição JSON
         body = request.get_json()
 
+        # Se o body estiver vazio
         if not body:
             return make_response(jsonify({"erro":"Nome invalido"}), 400)
 
         # Extrai o valor de "nome" na requisição do JSON
+        # Extrai o valor de "nome" no corpo extraído
         nome = body['nome']
         
         # Se o valor de nome for um valor inválido
