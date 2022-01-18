@@ -94,7 +94,6 @@ def post_form():
         if not body:
             return make_response(jsonify({"erro":"Nome invalido"}), 400)
 
-        # Extrai o valor de "nome" na requisição do JSON
         # Extrai o valor de "nome" no corpo extraído
         nome = body['nome']
         
@@ -158,9 +157,6 @@ def put(id):
     return make_response(jsonify(carrinho), 200)
 # ----------------------------------------------------------------------------
 
-# @app.route('/patch')
-# def patch():
-#     return ...
 # ROTAS PATCH
 # ----------------------------------------------------------------------------
 
@@ -190,18 +186,24 @@ def patch(id):
     return make_response(jsonify(carrinho), 200)
 # ----------------------------------------------------------------------------
 
+# ROTAS DELETE
+# ----------------------------------------------------------------------------
 @app.route('/delete/<int:id>', methods=['DELETE'])
 def delete(id):
 
     # Para cada item no carrinho, procure por um com determinado ID
     item = [item for item in carrinho if item['id'] == id]
 
+    # Se o item existir
     if item:
+        # Remova o item do carrinho
         carrinho.remove(item[0])
+
+        # Exibe novamente todos os itens no carrinho de compras
         return make_response(jsonify(carrinho), 201)
 
     return make_response(jsonify({"erro":"Item nao encontrado"}), 404)
-    
+# ----------------------------------------------------------------------------
 
 if __name__ == '__main__':
     app.run(debug=True)
