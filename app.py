@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, Response
 from flask import render_template
 from flask import request, make_response, jsonify
 
@@ -25,14 +25,20 @@ app = Flask(__name__)
 
 # ROTAS GET
 # ----------------------------------------------------------------------------
+@app.route('/', methods=['GET','OPTIONS'])
+def get():
+    if request.method == 'OPTIONS':
+        resp = Response()
+        resp.headers['Allow'] = 'GET, POST, PUT, PATCH, DELETE'
+        return make_response(resp, jsonify({"mensagem":"ALLOW - Metodos aceitos pelo servidor"}))
 
 # Retorna uma representação JSON do carrinho de compras
-@app.route('/')
-def get_carrinho():
+@app.route('/carrinho', methods=['GET','OPTIONS'])
+def get_carrinho():      
     return make_response(jsonify(carrinho), 200)
 
 # Retorna um item específico em formato JSON do carrinho de compras
-@app.route('/<int:id>', methods=['GET'])
+@app.route('/carrinho/<int:id>', methods=['GET'])
 def get_carrinho_item(id):
 
     # Para cada item no carrinho, procure por um com determinado ID
@@ -52,7 +58,7 @@ def get_carrinho_item(id):
 # ----------------------------------------------------------------------------
 
 # Retorna a atualização do carrinho com o novo item adicionado por POST
-@app.route('/post/', methods=["GET","POST"])
+@app.route('/carrinho/post', methods=["GET","POST"])
 def post_form():
     if request.method == 'GET':
         # Renderiza um formulário para inserção de dados
@@ -120,7 +126,7 @@ def post_form():
 # ----------------------------------------------------------------------------
 
 # Atualiza ou cria um novo item no carrinho por requisição JSON
-@app.route('/put/<int:id>', methods=['PUT'])
+@app.route('/carrinho/put/<int:id>', methods=['PUT'])
 def put(id):
 
     # Extrai o conteúdo do corpo da requisição JSON
@@ -161,7 +167,7 @@ def put(id):
 # ----------------------------------------------------------------------------
 
 # Atualiza um item no carrinho por requisição JSON
-@app.route('/patch/<int:id>', methods=['PATCH'])
+@app.route('/carrinho/patch/<int:id>', methods=['PATCH'])
 def patch(id):
 
     # Extrai o conteúdo do corpo da requisição JSON
@@ -188,7 +194,7 @@ def patch(id):
 
 # ROTAS DELETE
 # ----------------------------------------------------------------------------
-@app.route('/delete/<int:id>', methods=['DELETE'])
+@app.route('/carrinho/delete/<int:id>', methods=['DELETE'])
 def delete(id):
 
     # Para cada item no carrinho, procure por um com determinado ID
