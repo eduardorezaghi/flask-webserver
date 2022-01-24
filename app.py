@@ -30,7 +30,10 @@ def get():
     if request.method == 'OPTIONS':
         resp = Response()
         resp.headers['Allow'] = 'GET, POST, PUT, PATCH, DELETE'
-        return make_response(resp, jsonify({"mensagem":"ALLOW - Metodos aceitos pelo servidor"}))
+        return resp
+    else:
+        message = {'message':'Flask Basic HTTP Server'}
+        return make_response(jsonify(message))
 
 # Retorna uma representação JSON do carrinho de compras
 @app.route('/carrinho', methods=['GET','OPTIONS'])
