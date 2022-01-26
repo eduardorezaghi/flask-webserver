@@ -25,6 +25,8 @@ MarkupSafe = "==2.0.1"
 SQLAlchemy = "==1.4.29"
 Werkzeug = "==2.0.2"
 httpie = "*"
+pydantic = "*"
+flask-pydantic-spec = "*"
 
 [dev-packages]
 

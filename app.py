@@ -1,10 +1,18 @@
-from flask import Flask, Response
+from turtle import title
+from flask import Flask
 from flask import render_template
 from flask import request, make_response, jsonify
+from flask_pydantic_spec import FlaskPydanticSpec, Response
+from pydantic import BaseModel
+
 
 # CARRINHO: Banco de Dados fictício
 # Representa um carrinho de compras, com seus itens
 #  contendo id e nome
+
+class Carrinho(BaseModel):
+    id: int
+    nome: str
 
 carrinho = [
     {
@@ -21,9 +29,17 @@ carrinho = [
 # >> $env:FLASK_ENV = "development"
 # >> $env:FLASK_APP = "app"
 app = Flask(__name__)
+#Especificação da API fornecida usando Pydantic
+spec = FlaskPydanticSpec('flask', title='Simple HTTP Server')
+spec.register(app)
 
+@app.route('/new/carrinho')
+@spec.validate(resp=Response(HTTP_200=Carrinho))
+def get_new():
+    """Retorna uma representação JSON do carrinho de compras"""
+    return "Nova rota usando Pydantic"
 
-# ROTAS GET
+"""# ROTAS GET
 # ----------------------------------------------------------------------------
 @app.route('/', methods=['GET','OPTIONS'])
 def get():
@@ -213,6 +229,6 @@ def delete(id):
 
     return make_response(jsonify({"erro":"Item nao encontrado"}), 404)
 # ----------------------------------------------------------------------------
-
+"""
 if __name__ == '__main__':
     app.run(debug=True)
