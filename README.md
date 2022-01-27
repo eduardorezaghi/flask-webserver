@@ -1,8 +1,18 @@
 # flask-webserver
-A simple Flask HTTP web-server, which implements *nearly* all HTTP methods in a Flask web application.
+A simple Flask HTTP web-server, which implements *nearly* all HTTP methods in a Flask web application.  
+This Flask web-server has been updated with:
+- [X] Pydantic validation
+- [X] Simple TinyDB JSON database
+- [X] API Specification (Swagger route testing)
+> **_NOTE:_**  This Flask-webserver specification is a simple implementation of a API documentation, and may be prone to errors.
 ---
+## API Specification
+In order to access and test the web-server routes, enter in your browser:
+- **127.0.0.1:5000/apidoc/swagger**  
+  or
+- **127.0.0.1:5000/apidoc/redoc**
 ## Testing examples
-In order to test this simple webserver, you can use _cURL_ or _Postman_.
+In order to test this simple web-server, you can use _cURL_, _Postman_ or _httpie_.
 - Testing using cURL:
   - GET 
     ```console 
