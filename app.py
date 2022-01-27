@@ -60,6 +60,14 @@ def put_new(id):
     db.update(body, item.id == id)
     return jsonify(body)
 
+@app.delete('/new/item/delete/<int:id>')
+@spec.validate(resp=Response('HTTP_204'))
+def delete_new(id):
+    "Remove um item do banco de dados"
+    item = Query()
+    db.remove(item.id == id)
+    return jsonify({})
+
 """# ROTAS GET
 # ----------------------------------------------------------------------------
 @app.route('/', methods=['GET','OPTIONS'])
