@@ -43,6 +43,14 @@ def get_new():
                     ).dict()
                 )
 
+@app.post('/new/item/post')
+@spec.validate(body=Request(Item), resp=Response(HTTP_200=Item))
+def post_new():
+    """Retorna o novo item adicionado por POST"""
+    body = request.context.body.dict()
+    db.insert(body)
+    return jsonify(body)
+
 """# ROTAS GET
 # ----------------------------------------------------------------------------
 @app.route('/', methods=['GET','OPTIONS'])
