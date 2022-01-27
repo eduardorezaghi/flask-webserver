@@ -1,37 +1,36 @@
-from turtle import title
+import os
+from itertools import count
+from typing import Optional
 from flask import Flask
 from flask import render_template
 from flask import request, make_response, jsonify
-from flask_pydantic_spec import FlaskPydanticSpec, Response
-from pydantic import BaseModel
-
+from flask_pydantic_spec import FlaskPydanticSpec, Request, Response
+from pydantic import BaseModel, Field
+from tinydb import Query, TinyDB
+from dotenv import load_dotenv
 
 # CARRINHO: Banco de Dados fictício
 # Representa um carrinho de compras, com seus itens
 #  contendo id e nome
-
-class Carrinho(BaseModel):
-    id: int
+c = count()
+class Item(BaseModel):
+    id: Optional[int] = Field(default_factory=lambda: next(c))
     nome: str
 
-carrinho = [
-    {
-        "id":1,
-        "nome":"notebook lenovo"
-    },
-    {
-        "id":2,
-        "nome":"dvd player"
-    },
-]
+
+class Carrinho(BaseModel):
+    item: list[Item]
+    count: int
 
 # Variáveis de ambiente da aplicação Flask
-# >> $env:FLASK_ENV = "development"
-# >> $env:FLASK_APP = "app"
+load_dotenv()
+FLASK_ENV = os.getenv('FLASK_ENV')
+FLASK_APP = os.getenv('FLASK_APP')
 app = Flask(__name__)
 #Especificação da API fornecida usando Pydantic
 spec = FlaskPydanticSpec('flask', title='Simple HTTP Server')
 spec.register(app)
+db = TinyDB('database.json')
 
 @app.route('/new/carrinho')
 @spec.validate(resp=Response(HTTP_200=Carrinho))
