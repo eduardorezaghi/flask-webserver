@@ -51,6 +51,15 @@ def post_new():
     db.insert(body)
     return jsonify(body)
 
+@app.put('/new/item/put/<int:id>')
+@spec.validate(body=Request(Item), resp=Response(HTTP_201=Item))
+def put_new(id):
+    """Retorna o item alterado por PUT"""
+    item = Query()
+    body = request.context.body.dict()
+    db.update(body, item.id == id)
+    return jsonify(body)
+
 """# ROTAS GET
 # ----------------------------------------------------------------------------
 @app.route('/', methods=['GET','OPTIONS'])
