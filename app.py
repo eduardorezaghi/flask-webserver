@@ -32,11 +32,16 @@ spec = FlaskPydanticSpec('flask', title='Simple HTTP Server')
 spec.register(app)
 db = TinyDB('database.json')
 
-@app.route('/new/carrinho')
+@app.get('/new/carrinho')
 @spec.validate(resp=Response(HTTP_200=Carrinho))
 def get_new():
     """Retorna uma representação JSON do carrinho de compras"""
-    return "Nova rota usando Pydantic"
+    return jsonify(
+            Carrinho(
+                item=db.all(), 
+                count=len(db.all())
+                    ).dict()
+                )
 
 """# ROTAS GET
 # ----------------------------------------------------------------------------
